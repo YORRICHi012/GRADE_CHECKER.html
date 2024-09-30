@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Checker with Confetti, Clapping Sound, and Thumbs-Up Fountain</title>
+    <style>
+        /* Style for the body */
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        /* Style for the container */
+        #container {
+            text-align: center;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Style for the HUD message */
+        #hudMessage {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        /* Style for the input and button */
+        input[type="number"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        /* Style for the message */
+        #message {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        /* Thumbs-up style */
+        .thumbs-up {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background-image: url('https://img.icons8.com/ios-filled/50/ffffff/thumbs-up.png');
+            background-size: cover;
+            opacity: 0;
+        }
+
+        /* Thumbs-up fountain animation */
+        @keyframes thumbsUpRise {
+            0% { bottom: 0; opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { bottom: 100%; opacity: 0; transform: translateX(-50%) translateY(-100px); }
+        }
+    </style>
+    <!-- Confetti library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        function checkGrade() {
+            // Get the input value
+            var grade = parseFloat(document.getElementById("numberInput").value);
+
+            // Check specific grade values and display appropriate messages
+            if (grade === 1.00 || grade === 1.25 || grade === 1.50 || grade === 1.75) {
+                document.getElementById("message").innerHTML = "GALING MO BOSS KEEP IT UP";
+                triggerConfetti();  // Trigger confetti
+                playClappingSound(); // Play clapping sound
+                triggerThumbsUpFountain(); // Trigger thumbs-up fountain animation
+            } else if (grade === 2.00 || grade === 2.25 || grade === 2.50 || grade === 2.75) {
+                document.getElementById("message").innerHTML = "OKII LNG YAN BAWI MIDTERM!";
+                triggerThumbsUpFountain(); // Trigger thumbs-up fountain animation
+            } else if (grade === 3.00 || grade === 3.25 || grade === 3.50 || grade === 3.75) {
+                document.getElementById("message").innerHTML = "BOBO POWTA!!!";
+            } else if (grade === 5.00) {
+                document.getElementById("message").innerHTML = "POWTA BOBO!!!";
+            } else {
+                document.getElementById("message").innerHTML = "OKII LNG YAN BAWI MIDTERM";
+            }
+
+            // Prevent form from submitting
+            return false;
+        }
+
+        // Function to trigger confetti
+        function triggerConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Function to play clapping sound
+        function playClappingSound() {
+            var audio = document.getElementById("clapSound");
+            audio.play();
+        }
+
+        // Function to trigger thumbs-up fountain animation
+        function triggerThumbsUpFountain() {
+            for (let i = 0; i < 10; i++) {
+                createThumbsUp();
+            }
+        }
+
+        // Function to create and animate a thumbs-up
+        function createThumbsUp() {
+            var thumbsUp = document.createElement("div");
+            thumbsUp.classList.add("thumbs-up");
+            document.body.appendChild(thumbsUp);
+
+            // Randomize position
+            thumbsUp.style.left = Math.random() * 100 + "vw";
+            thumbsUp.style.animation = `thumbsUpRise 1s forwards`;
+
+            // Remove the thumbs-up after animation completes
+            setTimeout(function() {
+                thumbsUp.remove();
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+
+    <div id="container">
+        <!-- HUD Message -->
+        <div id="hudMessage">For close friend only baka masaktan kayo eh HEHEH</div>
+
+        <h2>Enter your grade:</h2>
+        <form onsubmit="return checkGrade()">
+            <label for="numberInput">Grade: </label>
+            <br>
+            <input type="number" step="0.01" id="numberInput" name="number" required>
+            <br>
+            <input type="submit" value="Check Grade">
+        </form>
+
+        <p id="message"></p>
+
+        <!-- Clapping sound -->
+        <audio id="clapSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
+    </div>
+
+</body>
+</html>
